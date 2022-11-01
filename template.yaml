@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Coolifier Application
+
+Transform:
+  - AWS::Serverless-2016-10-31
+
+Resources:
+  CoolifyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/coolify.coolifier
+      Runtime: nodejs16.x
+      Architectures:
+        - x86_64
+      MemorySize: 256
+      Timeout: 100
+      Description: A Lambda function that generates and sends an image.
+      Policies:
+        - S3FullAccessPolicy:
+            BucketName: !Ref CoolifyBucket
+        - SESCrudPolicy:
+            IdentityName: "yourapprovedemail@gmail.com"
+      Environment:
+        Variables:
+          BUCKET: !Ref CoolifyBucket
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /{email}/{name}
+            Method: GET
+  CoolifyBucket:
+    Type: AWS::S3::Bucket
+
+Outputs:
+  WebEndpoint:
+    Description: "Coolifier's API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/youremail@domain.test/Your Name"

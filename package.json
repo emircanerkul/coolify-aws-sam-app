@@ -1,0 +1,9 @@
+{
+    "name": "Coolifier",
+    "description": "Coolify yourself :)",
+    "version": "1.0.0",
+    "dependencies": {
+        "aws-sdk": "^2.1239.0",
+        "text-to-picture": "^1.0.0"
+    }
+}
